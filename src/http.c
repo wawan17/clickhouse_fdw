@@ -83,17 +83,17 @@ ch_http_connection_t *ch_http_connection(char *host, int port, char *username, c
 
 	if (username && password)
 	{
-		n = snprintf(connstring, len, "http://%s:%s@%s:%d/", username, password, host, port);
+		n = snprintf(connstring, len, "https://%s:%s@%s:%d/", username, password, host, port);
 		curl_free(username);
 		curl_free(password);
 	}
 	else if (username)
 	{
-		n = snprintf(connstring, len, "http://%s@%s:%d/", username, host, port);
+		n = snprintf(connstring, len, "https://%s@%s:%d/", username, host, port);
 		curl_free(username);
 	}
 	else
-		n = snprintf(connstring, len, "http://%s:%d/", host, port);
+		n = snprintf(connstring, len, "https://%s:%d/", host, port);
 
 	if (n < 0)
 		goto cleanup;
@@ -148,6 +148,7 @@ ch_http_response_t *ch_http_simple_query(ch_http_connection_t *conn, const char 
 	curl_easy_setopt(conn->curl, CURLOPT_PATH_AS_IS, 1);
 	curl_easy_setopt(conn->curl, CURLOPT_URL, url);
 	curl_easy_setopt(conn->curl, CURLOPT_NOSIGNAL, 1);
+	curl_easy_setopt(conn->curl, CURLOPT_SSL_VERIFYPEER, 0);
 
 	/* variable */
 	curl_easy_setopt(conn->curl, CURLOPT_WRITEDATA, resp);
